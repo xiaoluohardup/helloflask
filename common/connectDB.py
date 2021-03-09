@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 
-
 import pymysql
 from conf import config
 from conf import dbname
