@@ -1,5 +1,6 @@
 from flask import Flask, request
 import json,time
+import requests
 import pymysql
 from conf import config
 from conf import dbname
@@ -73,6 +74,7 @@ def sql_write_result(params):
         print("result",result)
         if (result == ()):
             result = "信息存储成功(Insert)"
+        requestjenkins()
         return result
     except Exception as err:
         print("Error %s for execute sql" % (err))
@@ -124,10 +126,16 @@ def sql_num_result():
         result = "sql query error %s" %err
         return result
 
+def requestjenkins():
+    url = "http://test-qa.39on.com/jenkins/job/InterfaceTest/build?token=123456" #jenkins调用链接
+    r = request.get(url)
+    print(r.status_code)
+    print(r.content)
+
 if __name__ == '__main__':
    conn_db()
    app.run(
-       host='127.1.1.1',
+       host='127.1.1.1',# linux下需要部署0.0.0.0才可以给外网访问
        port= 5000,
        debug=True
     )
