@@ -41,7 +41,7 @@ def jenkins(result):
     req.add_header('Content-Type',
                    'application/json')
     response = urllib.request.urlopen(req)
-    sql_update_result(id) #执行更新数据库的status字段为 1
+    sql_update_result(id) #执行更新数据库的 status字段为 1
     print(response)
 
 # 功能函数---根据参数查询数据库的数据
