@@ -128,7 +128,7 @@ def sql_num_result():
 
 def requestjenkins():
     url = "http://test-qa.39on.com/jenkins/job/InterfaceTest/build?token=123456" #jenkins调用链接
-    r = request.get(url)
+    r = requests.get(url)
     print(r.status_code)
     print(r.content)
 
