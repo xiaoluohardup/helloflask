@@ -32,7 +32,7 @@ def conn_db():
         print("2391",table_exists(cursor,TABLE_NAME))
         if(table_exists(cursor,TABLE_NAME) == 0):
            cursor.execute(
-                 'CREATE TABLE %s(id int(11) NOT NULL AUTO_INCREMENT,jenkinid varchar(200) unique ,developer varchar(200),'
+                 'CREATE TABLE %s(id int(11) NOT NULL AUTO_INCREMENT,jenkinid varchar(200) NOT NULL unique ,developer varchar(200),'
                  'dev_info varchar(512), status varchar(10),utime datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,ctime datetime NOT NULL,PRIMARY KEY (`id`)) default charset = utf8' % TABLE_NAME )
 
         # 批量插入纪录

@@ -12,10 +12,9 @@ print("输出excel文件路径：",xlsPath )
 dbname = "testluojunfeng"
 tablename = "develop"
 config = {
-    'host': '127.0.0.1',
+    'host': "localhost",
     'port': 3306,
     'user': 'root',
-    'passwd': '',
-    'charset': 'utf8',
-    'cursorclass': pymysql.cursors.DictCursor
+    'passwd': '',#linux下的密码是 123456
+    'charset': 'utf8'
 }
