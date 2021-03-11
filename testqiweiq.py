@@ -19,30 +19,35 @@ def getResult(fname):
 
 # 用于企业微信发送信息
 def jenkins(result):
-    # 企业微信机器人的webhook
     sql = sql_query_result()
-    develop = sql[2]
-    developinfo = sql[3]
-    ctime = sql[6]
-    print("ctime1:",ctime)
-    ctime = str(ctime)
-    id = sql[0]
-    id = int(id)
-    url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0b7bc9f3-bacb-4e0f-8519-03bcca891b7d'
-    if result == 1:
-        con = {"msgtype": "text",
-               "text": {"content": "构建信息：%s \r\n构建开发: %s \r\n构建时间：%s \r\n构建结果: 失败\r\n请您检查代码并重新构建，谢谢！" %(developinfo,develop,ctime)} }
-    elif result == 0:
-        con = {"msgtype": "text",
-               "text": {"content": "构建信息：%s \r\n构建开发: %s \r\n构建结果: 成功\r\n构建时间：%s \r\n "%(developinfo,develop,ctime)}}
+    if(sql == 0):
+         print("sql查询为空，无法发送消息")
+    else:
+         develop = sql[2]
+         developinfo = sql[3]
+         ctime = sql[6]
+         print("ctime1:",ctime)
+         ctime = str(ctime)
+         id = sql[0]
+         id = int(id)
+         # 企业微信机器人的webhook
+         url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0b7bc9f3-bacb-4e0f-8519-03bcca891b7d'
+         if result == 1:
+              con = {"msgtype": "text",
+                   "text": {"content": "构建信息：%s \r\n构建开发: %s \r\n构建时间：%s \r\n构建结果: 失败\r\n请您检查代码并重新构建，谢谢！" % (
+                   developinfo, develop, ctime)}}
+         elif result == 0:
+              con = {"msgtype": "text",
+                   "text": {
+                       "content": "构建信息：%s \r\n构建开发: %s \r\n构建结果: 成功\r\n构建时间：%s \r\n " % (developinfo, develop, ctime)}}
 
-    jd = json.dumps(con).encode('utf-8')
-    req = urllib.request.Request(url, jd)
-    req.add_header('Content-Type',
-                   'application/json')
-    response = urllib.request.urlopen(req)
-    sql_update_result(id) #执行更新数据库的 status字段为 1
-    print(response)
+         jd = json.dumps(con).encode('utf-8')
+         req = urllib.request.Request(url, jd)
+         req.add_header('Content-Type',
+                       'application/json')
+         response = urllib.request.urlopen(req)
+         sql_update_result(id)  # 执行更新数据库的 status字段为 1
+         print(response)
 
 # 功能函数---根据参数查询数据库的数据
 def sql_query_result():
@@ -53,11 +58,15 @@ def sql_query_result():
     conn.select_db(dbname)
     cursor = conn.cursor()
     try:
-       cursor.execute(ExeSQL)
-       result = cursor.fetchall()
-       conn.close()
-       print("sqlsdsdsds", result[0])
-       return result[0]
+        cursor.execute(ExeSQL)
+        if (cursor.rowcount == 0):
+            result = 0
+            return result
+        else:
+            result = cursor.fetchall()
+            conn.close()
+            print("sqlsdsdsds", result[0])
+            return result[0]
     except Exception as err:
        print("Error %s for execute sql" % (err))
        print("参数查询失败(20003) %s" %err)
