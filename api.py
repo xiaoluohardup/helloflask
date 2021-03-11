@@ -26,12 +26,14 @@ def check():
     else :
         get_data = request.args.to_dict()
         print("获取链接上的参数：", get_data)
-        jenkinid = get_data.get('jenkinid')# 应该默认传一个值
+        # jenkinid = get_data.get('jenkinid')# 应该默认传一个值
         developer = get_data.get('developer')
         dev_info = get_data.get('dev_info')
         # ctime = time.strftime("%Y-%m-%d %H:%M:%S") #获取当前时间
         status = "0"
-        id = sql_num_result()
+        sqlnum = sql_num_result()
+        id = sqlnum[0]
+        jenkinid = sqlnum[1]
         # 对参数进行操作
         params = []
         params.append(id)
@@ -108,18 +110,27 @@ def sql_num_result():
     conn.select_db(dbname)
     cursor = conn.cursor()
     try:
-        cursor.execute('SELECT %s.id FROM %s.%s order by id desc' %(tablename,dbname,tablename))
+        cursor.execute('SELECT %s.id,%s.jenkinid FROM %s.%s order by id desc' %(tablename,tablename,dbname,tablename))
         print('total records:', cursor.rowcount)
         if (cursor.rowcount == 0):
-            recordid = 1
-            return recordid
+            id = 1
+            jenkinid = 1  #初始化jenkinsid
+            result = []
+            result.append(id)
+            result.append(jenkinid)
+            return result
         else:
             result = cursor.fetchall()
             conn.close()
             print("result21222", result[0])
             print("result", type(result[0][0]))
             print("result", result[0][0])
-            result = int(result[0][0]) + 1
+            id = int(result[0][0]) + 1
+            jenkinid = int(result[0][1]) + 1
+            result = []
+            result.append(id)
+            result.append(jenkinid)
+            print("resultresultresult",result)
             return result
     except Exception as err:
         print("Error %s for execute sql" % (err))
