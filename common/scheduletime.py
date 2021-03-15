@@ -5,7 +5,7 @@ from conf import config
 from conf import dbname
 from conf import tablename
 
-# 功能函数---定时jenkinsid+1
+# 功能函数---定时 jenkinsid+1
 def sql_update_jenkinid():
     conn = pymysql.connect(**config)
     conn.autocommit(True)
